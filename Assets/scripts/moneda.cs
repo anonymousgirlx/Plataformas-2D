@@ -2,18 +2,19 @@
 using System.Collections;
 
 public class moneda : MonoBehaviour {
-	// función para controlar cuando un objeto entra en el trigger
-	void OnTriggerEnter2D(Collider2D col){
-		Debug.Log ("Alguien me ha tocado");
-		Destroy (gameObject);
-	}
 
-	void OnTriggerExit2D(Collider2D col){
-		Debug.Log ("Han dejado de tocarme");
-	}
+	private Rigidbody2D rb;
 
-	void OnTriggerStay2D(Collider2D col){
-		Debug.Log ("Me están tocando, me siento incómodo");
+	void Start (){
+		rb = GetComponent<Rigidbody2D> ();
+		rb.AddForce (new Vector2 (Random.Range (-200, 200), Random.Range (50, 100)));
+	}
+	
+
+	void OnCollisionEnter2D(Collision2D col) {
+		if (col.gameObject.tag == "Player") {
+			Destroy (gameObject);
+		}
 	}
 }
 
