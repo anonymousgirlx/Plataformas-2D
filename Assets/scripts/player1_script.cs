@@ -9,6 +9,7 @@ public class player1_script : MonoBehaviour {
 	private Animator animator;
 	private Rigidbody2D rb;
 	private gamecontrol_script gcs;
+	public GameObject particulas_muerte;
 
 
 	// Use this for initialization
@@ -62,7 +63,8 @@ public class player1_script : MonoBehaviour {
 
 	void OnCollisionEnter2D(Collision2D col){
 		if (col.gameObject.tag == "muerte") {
-			gcs.respawn ();
+			//gcs.respawn ();
+			Instantiate(particulas_muerte, transform.position, transform.rotation);
 			
 		}
 	}
