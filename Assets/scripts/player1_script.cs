@@ -6,10 +6,15 @@ public class player1_script : MonoBehaviour {
 	public float salto = 10f;
 	public float power =1f;
 	public bool tocando_suelo = false;
+	public GameObject particulas_muerte;
+
+	public AudioClip sonido_salto;
+	public AudioClip sonido_herir;
+	public AudioClip sonido_moneda;
+
 	private Animator animator;
 	private Rigidbody2D rb;
 	private gamecontrol_script gcs;
-	public GameObject particulas_muerte;
 	private AudioSource audio;
 
 
@@ -41,6 +46,7 @@ public class player1_script : MonoBehaviour {
 		if (Input.GetKey (KeyCode.Space) && tocando_suelo) {
 			rb.AddForce (Vector2.up * salto);
 			animator.SetBool ("saltando", true);
+			audio.PlayOneShot (sonido_salto, 0.5f); //escala de sonido del 0-1
 		}
 	}
 
@@ -61,15 +67,24 @@ public class player1_script : MonoBehaviour {
 			tocando_suelo = true;
 			animator.SetBool ("saltando", false);
 		}
+
+		if (objeto.tag == "moneda") {
+			audio.PlayOneShot (sonido_moneda);
+		}
 	}
 
 	void OnCollisionEnter2D(Collision2D col){
 		if (col.gameObject.tag == "muerte") {
+			Invoke ("muerte", 1);
+			//InvokeRepeating - Invoca enemigos cada cierto tiempo
+			audio.PlayOneShot (sonido_herir);
 			//gcs.respawn ();
 			Instantiate(particulas_muerte, transform.position, transform.rotation);
 		}
-		if (col.gameObject.tag == "muerte") {
-			audio.Play ();
-		}
+
+	}
+
+	void muerte (){
+		gcs.respawn ();
 	}
 }
